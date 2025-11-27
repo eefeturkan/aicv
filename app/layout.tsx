@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "AI CV Analizi - Profesyonel CV İnceleme ve Değerlendirme",
@@ -15,6 +16,7 @@ export default function RootLayout({
     <html lang="tr">
       <body>
         {children}
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );

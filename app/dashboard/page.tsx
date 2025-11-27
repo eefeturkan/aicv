@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { CVUpload } from "@/components/cv-upload";
-import { Sparkles, Upload, History, LogOut, User, CreditCard, Loader2, FileText, Calendar, TrendingUp } from "lucide-react";
+import { Sparkles, Upload, History, LogOut, User, CreditCard, Loader2, FileText, Calendar, TrendingUp, Mail, Target } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 interface UserData {
   id: string;
@@ -30,6 +31,7 @@ export default function DashboardPage() {
   const [credits, setCredits] = useState<number | null>(null);
   const [analyses, setAnalyses] = useState<CVAnalysis[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const previousAnalysesRef = useRef<CVAnalysis[]>([]);
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -102,6 +104,64 @@ export default function DashboardPage() {
 
     loadUserData();
   }, []);
+
+  // Polling for real-time status updates
+  useEffect(() => {
+    if (!user) return;
+
+    const hasProcessingAnalyses = analyses.some(
+      (a) => a.status === "pending" || a.status === "processing"
+    );
+
+    if (!hasProcessingAnalyses) {
+      previousAnalysesRef.current = analyses;
+      return;
+    }
+
+    const pollInterval = setInterval(async () => {
+      await refreshData();
+    }, 3000); // Poll every 3 seconds
+
+    return () => clearInterval(pollInterval);
+  }, [user, analyses]);
+
+  // Check for completed analyses and show toast
+  useEffect(() => {
+    if (previousAnalysesRef.current.length === 0) {
+      previousAnalysesRef.current = analyses;
+      return;
+    }
+
+    analyses.forEach((currentAnalysis) => {
+      const previousAnalysis = previousAnalysesRef.current.find(
+        (a) => a.id === currentAnalysis.id
+      );
+
+      if (
+        previousAnalysis &&
+        previousAnalysis.status !== "completed" &&
+        currentAnalysis.status === "completed"
+      ) {
+        toast.success("CV Analizi Tamamlandı!", {
+          description: `${currentAnalysis.file_name} başarıyla analiz edildi.`,
+          duration: 5000,
+        });
+      }
+
+      if (
+        previousAnalysis &&
+        previousAnalysis.status !== "failed" &&
+        currentAnalysis.status === "failed"
+      ) {
+        toast.error("Analiz Başarısız", {
+          description: `${currentAnalysis.file_name} analiz edilemedi.`,
+          duration: 5000,
+        });
+      }
+    });
+
+    previousAnalysesRef.current = analyses;
+  }, [analyses]);
 
   const refreshData = async () => {
     const supabase = createClient();
@@ -252,16 +312,17 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Upload Section */}
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12 mb-8">
-          <div className="max-w-2xl mx-auto">
+        {/* Action Cards Grid */}
+        <div className="grid md:grid-cols-3 gap-8 mb-8">
+          {/* CV Upload Card */}
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12">
             <div className="text-center mb-8">
               <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-violet-100 to-indigo-100 mb-6">
                 <Upload className="h-8 w-8 text-violet-600" />
               </div>
 
               <h2 className="text-3xl font-black text-gray-900 mb-4">
-                CV'nizi Yükleyin
+                CV Analizi
               </h2>
 
               <p className="text-gray-600">
@@ -277,6 +338,56 @@ export default function DashboardPage() {
                 onUploadSuccess={refreshData}
               />
             )}
+          </div>
+
+          {/* Cover Letter Generator Card */}
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12">
+            <div className="text-center mb-8">
+              <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 mb-6">
+                <Mail className="h-8 w-8 text-indigo-600" />
+              </div>
+
+              <h2 className="text-3xl font-black text-gray-900 mb-4">
+                Ön Yazı Oluştur
+              </h2>
+
+              <p className="text-gray-600 mb-6">
+                CV'nizi ve iş ilanını kullanarak AI destekli kişiselleştirilmiş ön yazı oluşturun.
+                Her ön yazı 1 kredi kullanır.
+              </p>
+            </div>
+
+            <Link href="/dashboard/cover-letter">
+              <Button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg shadow-indigo-500/30 h-12">
+                <Mail className="mr-2 h-5 w-5" />
+                Ön Yazı Oluştur
+              </Button>
+            </Link>
+          </div>
+
+          {/* Job Match Analyzer Card */}
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12">
+            <div className="text-center mb-8">
+              <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-cyan-100 to-blue-100 mb-6">
+                <Target className="h-8 w-8 text-cyan-600" />
+              </div>
+
+              <h2 className="text-3xl font-black text-gray-900 mb-4">
+                İş Uyum Analizi
+              </h2>
+
+              <p className="text-gray-600 mb-6">
+                İş ilanı ile CV'nizi karşılaştırın, uyum skorunu öğrenin ve eksik becerilerinizi keşfedin.
+                Her analiz 1 kredi kullanır.
+              </p>
+            </div>
+
+            <Link href="/dashboard/job-match">
+              <Button className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 shadow-lg shadow-cyan-500/30 h-12">
+                <Target className="mr-2 h-5 w-5" />
+                İş Uyum Analizi Yap
+              </Button>
+            </Link>
           </div>
         </div>
 

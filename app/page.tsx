@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   CheckCircle2, Upload, Sparkles, TrendingUp, FileText,
-  Zap, Shield, Clock, Target, Star, Award, Brain, Rocket
+  Zap, Shield, Clock, Target, Star, Award, Brain, Rocket, Mail, Users, BarChart3, BarChart2
 } from "lucide-react";
 
 export default function Home() {
@@ -30,6 +30,10 @@ export default function Home() {
             </span>
           </div>
           <nav className="hidden md:flex items-center gap-8">
+            <a href="#hizmetler" className="text-gray-700 hover:text-violet-600 transition-colors font-medium relative group">
+              Hizmetler
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-violet-600 to-indigo-600 group-hover:w-full transition-all duration-300"></span>
+            </a>
             <a href="#ozellikler" className="text-gray-700 hover:text-violet-600 transition-colors font-medium relative group">
               Özellikler
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-violet-600 to-indigo-600 group-hover:w-full transition-all duration-300"></span>
@@ -87,7 +91,7 @@ export default function Home() {
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Yapay zeka destekli analizle CV'nizi saniyeler içinde değerlendirin,
+            Yapay zeka ile CV analizi ve ön yazı oluşturun,
             <span className="font-semibold text-violet-600"> detaylı geri bildirimler </span>
             alın ve iş başvurularınızda
             <span className="font-semibold text-indigo-600"> öne çıkın</span>.
@@ -118,6 +122,207 @@ export default function Home() {
                 <span className="text-gray-700 font-medium">{item.text}</span>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section - Main Offerings */}
+      <section id="hizmetler" className="container mx-auto px-4 py-24">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center space-y-4 mb-16">
+            <div className="inline-block">
+              <span className="bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
+                AI-Powered Services
+              </span>
+            </div>
+            <h2 className="text-5xl md:text-6xl font-black text-gray-900">
+              Hizmetlerimiz
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Kariyerinizi güçlendirmek için yapay zeka destekli profesyonel araçlar
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* CV Analysis Service */}
+            <div className="group relative bg-white rounded-3xl p-10 shadow-2xl border-2 border-gray-100 hover:border-violet-300 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-violet-400 to-indigo-400 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
+
+              <div className="relative z-10">
+                <div className="inline-flex p-5 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-500 shadow-xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                  <FileText className="h-12 w-12 text-white" />
+                </div>
+
+                <h3 className="text-3xl font-black text-gray-900 mb-4 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-violet-600 group-hover:to-indigo-600 group-hover:bg-clip-text transition-all">
+                  AI CV Analizi
+                </h3>
+
+                <p className="text-gray-600 text-lg mb-6 leading-relaxed">
+                  Yapay zeka motorumuz CV'nizi 8 farklı kategoride detaylı olarak analiz eder ve size özel iyileştirme önerileri sunar.
+                </p>
+
+                <div className="space-y-3 mb-8">
+                  {[
+                    "Profesyonel iletişim bilgileri kontrolü",
+                    "İş deneyimi ve başarı ölçümleri",
+                    "Beceri ve eğitim analizi",
+                    "ATS uyumluluk skoru",
+                    "Detaylı grafikler ve skorlama",
+                    "Kişiselleştirilmiş iyileştirme önerileri"
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-3 group/item">
+                      <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0 group-hover/item:scale-125 transition-transform" />
+                      <span className="text-gray-700">{item}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-4 pt-6 border-t border-gray-200">
+                  <div className="flex-1">
+                    <div className="text-sm text-gray-500 mb-1">Süre</div>
+                    <div className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                      <Clock className="h-6 w-6 text-violet-600" />
+                      ~30 saniye
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-gray-500 mb-1">Maliyet</div>
+                    <div className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                      <Sparkles className="h-6 w-6 text-violet-600" />
+                      1 Kredi
+                    </div>
+                  </div>
+                </div>
+
+                <Link href="/auth/signup" className="block mt-6">
+                  <Button className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 shadow-lg shadow-violet-500/30 hover:shadow-xl hover:shadow-violet-500/50 transition-all duration-300 h-12 text-lg">
+                    <Upload className="mr-2 h-5 w-5" />
+                    CV Analizi Yap
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Cover Letter Generator Service */}
+            <div className="group relative bg-white rounded-3xl p-10 shadow-2xl border-2 border-gray-100 hover:border-purple-300 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
+
+              <div className="relative z-10">
+                <div className="inline-flex p-5 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 shadow-xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                  <Mail className="h-12 w-12 text-white" />
+                </div>
+
+                <h3 className="text-3xl font-black text-gray-900 mb-4 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-pink-600 group-hover:bg-clip-text transition-all">
+                  AI Ön Yazı Oluşturucu
+                </h3>
+
+                <p className="text-gray-600 text-lg mb-6 leading-relaxed">
+                  İş ilanınıza ve CV'nize özel, profesyonel ve etkili ön yazılar yapay zeka ile saniyeler içinde oluşturun.
+                </p>
+
+                <div className="space-y-3 mb-8">
+                  {[
+                    "CV'nize özel kişiselleştirilmiş içerik",
+                    "İş ilanına tam uyumlu yapı",
+                    "Türkçe ve İngilizce dil desteği",
+                    "Profesyonel ton ve format",
+                    "Anında kopyalama özelliği",
+                    "Sektörel en iyi örnekler analizi"
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-3 group/item">
+                      <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0 group-hover/item:scale-125 transition-transform" />
+                      <span className="text-gray-700">{item}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-4 pt-6 border-t border-gray-200">
+                  <div className="flex-1">
+                    <div className="text-sm text-gray-500 mb-1">Süre</div>
+                    <div className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                      <Clock className="h-6 w-6 text-purple-600" />
+                      ~20 saniye
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-gray-500 mb-1">Maliyet</div>
+                    <div className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                      <Sparkles className="h-6 w-6 text-purple-600" />
+                      1 Kredi
+                    </div>
+                  </div>
+                </div>
+
+                <Link href="/auth/signup" className="block mt-6">
+                  <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/50 transition-all duration-300 h-12 text-lg">
+                    <Mail className="mr-2 h-5 w-5" />
+                    Ön Yazı Oluştur
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Job Match Analyzer Service */}
+            <div className="group relative bg-white rounded-3xl p-10 shadow-2xl border-2 border-gray-100 hover:border-cyan-300 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
+
+              <div className="relative z-10">
+                <div className="inline-flex p-5 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-500 shadow-xl mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                  <BarChart2 className="h-12 w-12 text-white" />
+                </div>
+
+                <h3 className="text-3xl font-black text-gray-900 mb-4 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyan-600 group-hover:to-blue-600 group-hover:bg-clip-text transition-all">
+                  İş Uyum Analizi
+                </h3>
+
+                <p className="text-gray-600 text-lg mb-6 leading-relaxed">
+                  İş ilanınızı CV'nizle karşılaştırın, uyum skorunu öğrenin ve eksik becerilerinizi keşfedin.
+                </p>
+
+                <div className="space-y-3 mb-8">
+                  {[
+                    "CV ve iş ilanı eşleştirmesi",
+                    "Uyum skoru hesaplama",
+                    "Eksik beceri analizi",
+                    "Mevcut güçlü yönler",
+                    "Anahtar kelime uyumu",
+                    "Kişiselleştirilmiş öneriler"
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-3 group/item">
+                      <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0 group-hover/item:scale-125 transition-transform" />
+                      <span className="text-gray-700">{item}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-4 pt-6 border-t border-gray-200">
+                  <div className="flex-1">
+                    <div className="text-sm text-gray-500 mb-1">Süre</div>
+                    <div className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                      <Clock className="h-6 w-6 text-cyan-600" />
+                      ~30 saniye
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-gray-500 mb-1">Maliyet</div>
+                    <div className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                      <Sparkles className="h-6 w-6 text-cyan-600" />
+                      1 Kredi
+                    </div>
+                  </div>
+                </div>
+
+                <Link href="/auth/signup" className="block mt-6">
+                  <Button className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/50 transition-all duration-300 h-12 text-lg">
+                    <BarChart2 className="mr-2 h-5 w-5" />
+                    İş Uyum Analizi Yap
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -231,6 +436,9 @@ export default function Home() {
               { title: "Eğitim Geçmişi", description: "Akademik bilgilerin tam sunumu", icon: "🎓", color: "from-yellow-500 to-orange-500" },
               { title: "Beceri Analizi", description: "Sektörel beceri uyumluluk kontrolü", icon: "⚡", color: "from-red-500 to-pink-500" },
               { title: "ATS Uyumluluğu", description: "Tarama sistemleri için optimizasyon", icon: "🤖", color: "from-indigo-500 to-purple-500" },
+              { title: "AI Ön Yazı Oluşturucu", description: "İş ilanına özel kişiselleştirilmiş ön yazı", icon: "✉️", color: "from-violet-500 to-purple-500" },
+              { title: "Detaylı Skorlama", description: "8 farklı kategoride ayrıntılı puanlama", icon: "📊", color: "from-cyan-500 to-blue-500" },
+              { title: "Anlık Sonuçlar", description: "30 saniyede kapsamlı analiz raporu", icon: "⚡", color: "from-orange-500 to-red-500" },
             ].map((feature, idx) => (
               <div
                 key={idx}

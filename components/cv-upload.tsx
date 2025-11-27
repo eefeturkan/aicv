@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Upload, FileText, X, Loader2, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
 
 interface CVUploadProps {
   userId: string;
@@ -73,6 +74,10 @@ export function CVUpload({ userId, credits, onUploadSuccess }: CVUploadProps) {
     setIsUploading(true);
     setError(null);
 
+    const uploadingToast = toast.loading("CV yükleniyor...", {
+      description: "Dosyanız yükleniyor ve analiz başlatılıyor.",
+    });
+
     try {
       const supabase = createClient();
 
@@ -81,6 +86,11 @@ export function CVUpload({ userId, credits, onUploadSuccess }: CVUploadProps) {
       const fileName = `${userId}/${Date.now()}.${fileExt}`;
 
       // Upload to Supabase Storage
+      toast.loading("CV yükleniyor...", {
+        id: uploadingToast,
+        description: "Dosyanız Supabase'e yükleniyor.",
+      });
+
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from("cv-uploads")
         .upload(fileName, file);
@@ -89,12 +99,12 @@ export function CVUpload({ userId, credits, onUploadSuccess }: CVUploadProps) {
         throw uploadError;
       }
 
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from("cv-uploads")
-        .getPublicUrl(fileName);
-
       // Create CV analysis record
+      toast.loading("Analiz başlatılıyor...", {
+        id: uploadingToast,
+        description: "CV analizi için kayıt oluşturuluyor.",
+      });
+
       const { data: analysisData, error: analysisError } = await supabase
         .from("cv_analyses")
         .insert({
@@ -127,6 +137,12 @@ export function CVUpload({ userId, credits, onUploadSuccess }: CVUploadProps) {
         throw new Error("CV analizi başlatılamadı");
       }
 
+      toast.success("CV Başarıyla Yüklendi!", {
+        id: uploadingToast,
+        description: "CV'niz analiz ediliyor. Sonuçlar hazır olduğunda bildirim alacaksınız.",
+        duration: 5000,
+      });
+
       // Reset form
       setFile(null);
       if (fileInputRef.current) {
@@ -137,7 +153,14 @@ export function CVUpload({ userId, credits, onUploadSuccess }: CVUploadProps) {
       onUploadSuccess();
     } catch (err: any) {
       console.error("Upload error:", err);
-      setError(err.message || "Dosya yüklenirken bir hata oluştu");
+      const errorMessage = err.message || "Dosya yüklenirken bir hata oluştu";
+      setError(errorMessage);
+
+      toast.error("Yükleme Başarısız", {
+        id: uploadingToast,
+        description: errorMessage,
+        duration: 5000,
+      });
     } finally {
       setIsUploading(false);
     }
